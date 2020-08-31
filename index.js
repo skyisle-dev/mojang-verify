@@ -10,6 +10,7 @@ const discord = require('discord.js')
 const client = new discord.Client()
 
 const keyMap = new Map()
+const unverifyKeyMap = new Map()
 
 app.use(Express.urlencoded())
 app.use(Express.static('./webroot'))
@@ -36,7 +37,7 @@ app.get('/:discordid', (req, res) => {
 */
 
 app.get('/finish', (req, res) => {
-    return res.send('인증되었습니다. 이 창을 닫으셔도 됩니다')
+    return res.send('인증(취소)되었습니다. 이 창을 닫으셔도 됩니다')
 })
 
 function check(dd) {
@@ -55,6 +56,23 @@ function check(dd) {
     }
     return 'NeedVerify'
 }
+
+app.get('/unverify', (req,res) => {
+    if(req.query.dd === undefined || req.query.dd.replace(' ','') === '') {
+        return res.send('<script>alert("잘못된 요청입니다."); history.back()</script>')
+    }
+    if(!unverifyKeyMap.has(req.query.dd)) {
+        return res.send('<script>alert("잘못된 요청입니다."); history.back()</script>')
+    }
+    const guild = client.guilds.cache.get('748537416435892294')
+    console.log(guild.name)
+    const id = keyMap.get(req.body.dd)
+    const member = guild.members.cache.get(id)
+    member.roles.remove(guild.roles.cache.get('749569591973511188'))
+    fs.unlinkSync(`./${ps.selectedProfile.name}_${req.body.email}.txt`, '')
+    unverifyKeyMap.delete(req.body.dd)
+    return res.send('<script>alert("성공적으로 인증이 취소되었습니다."); location.href = "/finish"</script>')
+})
 
 app.post('/verify', (req,res) => {
 
@@ -154,6 +172,29 @@ client.on('message', (msg) => {
             
         }
         msg.channel.send('이미 인증이 되어 있습니다.(이 메시지는 2초 후에 지워집니다)').then((msg1) => {
+            setTimeout(() => {
+                msg.delete()
+                msg1.delete()
+            }, 2000)
+        })
+        return
+    }
+
+    if(msg.content === '/인증취소' && msg.channel.id === '749867750746357762') {
+        if(msg.member.roles.cache.has('749569591973511188')) {
+            const key = makeid(120)
+            unverifyKeyMap.set(key, msg.member.id)
+            msg.author.send(process.env.SKYISLE_VERIFY_DOMAIN + '/unverify?dd=' + key + ' 에서 인증하실수 있습니다.')
+            msg.channel.send('DM을 확인하세요!(이 메시지는 2초 후 지워집니다)').then((msg1) => {
+                setTimeout(() => {
+                    msg.delete()
+                    msg1.delete()
+                }, 2000)
+            })
+            return
+            
+        }
+        msg.channel.send('인증이 되어있지 않습니다.(이 메시지는 2초 후에 지워집니다)').then((msg1) => {
             setTimeout(() => {
                 msg.delete()
                 msg1.delete()
