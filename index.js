@@ -57,6 +57,23 @@ function check(dd) {
     return 'NeedVerify'
 }
 
+function check2(dd) {
+    const guild = client.guilds.cache.get('748537416435892294')
+    console.log(guild.name)
+    console.log(unverifyKeyMap)
+    const id = unverifyKeyMap.get(dd)
+    
+    const member = guild.members.cache.get(id)
+
+    if(member === undefined) {
+        return 'NotFoundUser'
+    }
+    if(member.roles.cache.has('749569591973511188')) {
+        return 'AlreadyVerifed'
+    }
+    return 'NeedVerify'
+}
+
 app.get('/unverify', (req,res) => {
     if(req.query.dd === undefined || req.query.dd.replace(' ','') === '') {
         return res.send('<script>alert("잘못된 요청입니다."); history.back()</script>')
@@ -66,7 +83,7 @@ app.get('/unverify', (req,res) => {
     }
     const guild = client.guilds.cache.get('748537416435892294')
     console.log(guild.name)
-    const id = keyMap.get(req.body.dd)
+    const id = unverifyKeyMap.get(req.body.dd)
     const member = guild.members.cache.get(id)
     member.roles.remove(guild.roles.cache.get('749569591973511188'))
     fs.unlinkSync(`./${ps.selectedProfile.name}_${req.body.email}.txt`, '')
