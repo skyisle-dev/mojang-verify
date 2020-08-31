@@ -83,7 +83,7 @@ app.get('/unverify', (req,res) => {
     }
     const guild = client.guilds.cache.get('748537416435892294')
     console.log(guild.name)
-    const id = unverifyKeyMap.get(req.body.dd)
+    const id = unverifyKeyMap.get(req.query.dd)
     const member = guild.members.cache.get(id)
     member.roles.remove(guild.roles.cache.get('749569591973511188'))
     fs.unlinkSync(`./${ps.selectedProfile.name}_${req.body.email}.txt`, '')
