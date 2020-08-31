@@ -4,14 +4,18 @@ const Express = require('express')
 const app = Express()
 const request = require('request')
 
+const fs = require('fs')
+
 const discord = require('discord.js')
 const client = new discord.Client()
+
+const keyMap = new Map()
 
 app.use(Express.urlencoded())
 app.use(Express.static('./webroot'))
 
 app.get('/', (req,res) => {
-    if(req.query.dd === undefined || req.query.dd.replace(' ','') === '' || isNaN(parseInt(req.query.dd))) {
+    if(req.query.dd === undefined || req.query.dd.replace(' ','') === '') {
         return res.sendStatus(404)
     }
 
@@ -38,7 +42,10 @@ app.get('/finish', (req, res) => {
 function check(dd) {
     const guild = client.guilds.cache.get('748537416435892294')
     console.log(guild.name)
-    const member = guild.members.cache.get(dd)
+    console.log(keyMap)
+    const id = keyMap.get(dd)
+    
+    const member = guild.members.cache.get(id)
 
     if(member === undefined) {
         return 'NotFoundUser'
@@ -52,7 +59,7 @@ function check(dd) {
 app.post('/verify', (req,res) => {
 
     if(check(req.body.dd) === 'NotFoundUser') {
-        return res.send('<script>alert("존재하지 않습니다."); history.back()</script>')
+        return res.send('<script>alert("잘못된 요청입니다."); history.back()</script>')
     }
     if(check(req.body.dd) === 'AlreadyVerifed') {
         return res.send('<script>alert("이미 인증이 되어있습니다."); history.back()</script>')
@@ -69,18 +76,36 @@ app.post('/verify', (req,res) => {
             }),
             method: 'POST'
         }, (err, res2, body) => {
-            if(err) return res.send('<script>alert("Mojang 인증서버로 접속할 수 없습니다."); history.back()</script>')
+            if(err) {
+                keyMap.delete(req.body.dd)
+                return res.send('<script>alert("Mojang 인증서버로 접속할 수 없습니다."); history.back()</script>')
+            }
             
             const ps = JSON.parse(body)
+
+            if(fs.existsSync(`./${ps.selectedProfile.name}_${req.body.email}.txt`)) {
+                keyMap.delete(req.body.dd)
+                return res.send('<script>alert("이미 인증이 되어있습니다."); history.back()</script>')
+            }
+
             if(ps.error === undefined) {
                 const guild = client.guilds.cache.get('748537416435892294')
                 console.log(guild.name)
-                const member = guild.members.cache.get(req.body.dd)
+                const id = keyMap.get(req.body.dd)
+                const member = guild.members.cache.get(id)
                 member.roles.add(guild.roles.cache.get('749569591973511188'))
+                fs.writeFileSync(`./${ps.selectedProfile.name}_${req.body.email}.txt`, '')
+                keyMap.delete(req.body.dd)
                 return res.send('<script>alert("인증되었습니다."); location.href = "/finish"</script>')
             }
-            if(ps.error === 'ForbiddenOperationException') return res.send('<script>alert("비밀번호가 틀렸습니다."); history.back()</script>')
-            if(ps.error !== undefined) return res.send('<script>alert("오류가 났습니다. ' + ps.error + '"); history.back()</script>')
+            if(ps.error === 'ForbiddenOperationException') { 
+                keyMap.delete(req.body.dd)
+                return res.send('<script>alert("비밀번호가 틀렸습니다."); history.back()</script>') 
+            }
+            if(ps.error !== undefined) {
+                keyMap.delete(req.body.dd)
+                return res.send('<script>alert("오류가 났습니다. ' + ps.error + '"); history.back()</script>')
+            }
         })
     }
 })
@@ -94,15 +119,31 @@ client.on('ready', () => {
     })
 })
 
+function makeid(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+ } 
+
 client.on('message', (msg) => {
     if(msg.author.bot) return
     if(msg.channel.type === 'dm') {
         return msg.channel.send('DM에서는 이용하실 수 없습니다.')
     }
 
-    if(msg.content === '/인증') {
+    if(msg.content.startsWith('/클리어') && !isNaN(parseInt(msg.content.split(' ')[1]))) {
+        msg.channel.bulkDelete(parseInt(msg.content.split(' ')[1]))
+    }
+
+    if(msg.content === '/인증' && msg.channel.id === '749832727485743216') {
         if(!msg.member.roles.cache.has('749569591973511188')) {
-            msg.author.send(process.env.SKYISLE_VERIFY_DOMAIN + '/?dd=' + msg.member.id + ' 에서 인증하실수 있습니다.')
+            const key = makeid(120)
+            keyMap.set(key, msg.member.id)
+            msg.author.send(process.env.SKYISLE_VERIFY_DOMAIN + '/?dd=' + key + ' 에서 인증하실수 있습니다.')
             msg.channel.send('DM을 확인하세요!(이 메시지는 2초 후 지워집니다)').then((msg1) => {
                 setTimeout(() => {
                     msg.delete()
