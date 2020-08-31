@@ -236,3 +236,8 @@ app.listen(port, () => {
 })
 
 client.login(process.env.SKYISLE_BOT_TOKEN)
+
+var http = require("http");
+setInterval(function() {
+    http.get("http://skyisle-verify.herokuapp.com");
+}, 300000); // every 5 minutes (300000)
