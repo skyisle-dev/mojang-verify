@@ -118,7 +118,9 @@ client.on('message', (msg) => {
     
 })
 
-app.listen(80, () => {
+const port = process.env.PORT || 80;
+
+app.listen(port, () => {
     console.log('server open on 80')
 })
 
