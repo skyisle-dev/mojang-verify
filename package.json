@@ -1,0 +1,19 @@
+{
+  "name": "mojangverify",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NamuTree0345/mojang-verify.git"
+  },
+  "author": "NamuTree0345",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/NamuTree0345/mojang-verify/issues"
+  },
+  "homepage": "https://github.com/NamuTree0345/mojang-verify#readme"
+}
