@@ -6,7 +6,7 @@ const app = Express()
 app.use(Express.urlencoded())
 app.use(Express.static('./webroot'))
 
-app.get('/', (req, res) => {
+app.get('/:discordid', (req, res) => {
     return res.sendFile(__dirname + '/webroot/index.html')
 })
 
