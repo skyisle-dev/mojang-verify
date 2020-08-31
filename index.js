@@ -112,7 +112,12 @@ client.on('message', (msg) => {
             return
             
         }
-        msg.channel.send('이미 인증이 되어 있습니다.')
+        msg.channel.send('이미 인증이 되어 있습니다.(이 메시지는 2초 후에 지워집니다)').then((msg1) => {
+            setTimeout(() => {
+                msg.delete()
+                msg1.delete()
+            }, 2000)
+        })
         return
     }
     
