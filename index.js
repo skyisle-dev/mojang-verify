@@ -86,9 +86,13 @@ app.get('/unverify', (req,res) => {
     const id = unverifyKeyMap.get(req.query.dd)
     const member = guild.members.cache.get(id)
     member.roles.remove(guild.roles.cache.get('749569591973511188'))
-    fs.unlinkSync(`./${ps.selectedProfile.name}_${req.body.email}.txt`, '')
-    unverifyKeyMap.delete(req.body.dd)
-    return res.send('<script>alert("성공적으로 인증이 취소되었습니다."); location.href = "/finish"</script>')
+    fs.readFile('./' + id + '.txt', (err, data) => {
+        if(err) { console.log(err); return res.send('<script>alert("오류가 났습니다."); history.back()</script>') }
+        fs.unlinkSync(`./${data}.txt`, '')
+        unverifyKeyMap.delete(req.body.dd)
+        return res.send('<script>alert("성공적으로 인증이 취소되었습니다."); location.href = "/finish"</script>')
+    })
+    
 })
 
 app.post('/verify', (req,res) => {
@@ -130,6 +134,7 @@ app.post('/verify', (req,res) => {
                 const member = guild.members.cache.get(id)
                 member.roles.add(guild.roles.cache.get('749569591973511188'))
                 fs.writeFileSync(`./${ps.selectedProfile.name}_${req.body.email}.txt`, '')
+                fs.writeFileSync(`./${id}.txt`, `${ps.selectedProfile.name}_${req.body.email}`)
                 keyMap.delete(req.body.dd)
                 return res.send('<script>alert("인증되었습니다."); location.href = "/finish"</script>')
             }
