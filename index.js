@@ -122,6 +122,15 @@ app.post('/verify', (req,res) => {
             
             const ps = JSON.parse(body)
 
+            if(ps.error === 'ForbiddenOperationException') { 
+                keyMap.delete(req.body.dd)
+                return res.send('<script>alert("비밀번호가 틀렸습니다."); history.back()</script>') 
+            }
+            if(ps.error !== undefined) {
+                keyMap.delete(req.body.dd)
+                return res.send('<script>alert("오류가 났습니다. ' + ps.error + '"); history.back()</script>')
+            }
+
             if(fs.existsSync(`./${ps.selectedProfile.name}_${req.body.email}.txt`)) {
                 keyMap.delete(req.body.dd)
                 return res.send('<script>alert("이미 인증이 되어있습니다."); history.back()</script>')
@@ -138,14 +147,7 @@ app.post('/verify', (req,res) => {
                 keyMap.delete(req.body.dd)
                 return res.send('<script>alert("인증되었습니다."); location.href = "/finish"</script>')
             }
-            if(ps.error === 'ForbiddenOperationException') { 
-                keyMap.delete(req.body.dd)
-                return res.send('<script>alert("비밀번호가 틀렸습니다."); history.back()</script>') 
-            }
-            if(ps.error !== undefined) {
-                keyMap.delete(req.body.dd)
-                return res.send('<script>alert("오류가 났습니다. ' + ps.error + '"); history.back()</script>')
-            }
+            
         })
     }
 })
