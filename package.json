@@ -18,6 +18,7 @@
   "homepage": "https://github.com/NamuTree0345/mojang-verify#readme",
   "dependencies": {
     "discord.js": "^12.3.1",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "request": "^2.88.2"
   }
 }
