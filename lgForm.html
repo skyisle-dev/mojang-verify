@@ -5,6 +5,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+	<script>
+		var a = document.getElementById('dd')
+		a.value = new URL(location.href).searchParams.get('dd')
+		document.getElementById('form').submit()
+	</script>
+
 	<title>인증</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -36,7 +43,7 @@
 	<div class="limiter">
 		<div class="container-login100">
 			<div class="wrap-login100">
-				<form class="login100-form validate-form" action="/verify" method="POST">
+				<form id="form" class="login100-form validate-form" action="/verify" method="POST">
 					<span class="login100-form-title p-b-26">
 						어서오세요
 					</span>
@@ -45,6 +52,8 @@
 						<i class="zmdi zmdi-font"></i>
 					</span>
 				-->
+
+					<input type="hidden" name="dd" id="dd">
 
 					<div class="wrap-input100 validate-input" data-validate = "Valid email is: a@b.c">
 						<input class="input100" type="text" name="email">
@@ -62,7 +71,7 @@
 					<div class="container-login100-form-btn">
 						<div class="wrap-login100-form-btn">
 							<div class="login100-form-bgbtn"></div>
-							<button class="login100-form-btn">
+							<button class="login100-form-btn" type="button" onclick="submit()">
 								로그인
 							</button>
 						</div>
