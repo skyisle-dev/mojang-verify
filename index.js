@@ -13,7 +13,7 @@ const keyMap = new Map()
 const unverifyKeyMap = new Map()
 
 app.use(Express.urlencoded())
-//app.use(Express.static('./webroot'))
+app.use(Express.static('./webroot'))
 
 app.get('/', (req,res) => {
     if(req.query.dd === undefined || req.query.dd.replace(' ','') === '') {
@@ -27,7 +27,7 @@ app.get('/', (req,res) => {
         return res.send('<script>alert("이미 인증이 되어있습니다."); history.back()</script>')
     }
 
-    return res.sendFile(__dirname + '/webroot/lgForm.html')
+    return res.sendFile(__dirname + '/lgForm.html')
 })
 
 /*
