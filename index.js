@@ -174,6 +174,7 @@ function makeid(length) {
    const uuid = require('uuid').v4
    return uuid()
  } 
+ //dddd
 
 client.on('message', (msg) => {
     if(msg.author.bot) return
