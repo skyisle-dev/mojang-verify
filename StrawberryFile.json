@@ -6,6 +6,6 @@
 		{"processName": "npm", "runTimeMs": 1000, "processArgument": "install"}
 	],
 	"postProcesses": [
-		{"processName": "pm2", "processArgument": "start 0"}
+		{"processName": "pm2", "processArgument": "restart 0"}
 	]
 }
