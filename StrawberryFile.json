@@ -1,0 +1,10 @@
+{
+	"projectName": "mojang-verify",
+	"projectDesc": "모장 인증",
+	"processes": [
+		{"processName": "npm", "runTimeMs": 1000, "processArgument": "install"}
+	],
+	"postProcesses": [
+		{"processName": "pm2", "processArgument": "start 0"}
+	]
+}
