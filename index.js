@@ -15,6 +15,10 @@ const unverifyKeyMap = new Map()
 app.use(Express.urlencoded())
 app.use(Express.static('./webroot'))
 
+app.get('/tos', (req,res) => {
+    return res.sendFile(__dirname + '/webroot/tos.html')
+})
+
 app.get('/', (req,res) => {
     if(req.query.dd === undefined || req.query.dd.replace(' ','') === '') {
         return res.sendStatus(404)
