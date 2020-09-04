@@ -162,6 +162,7 @@ client.on('ready', () => {
 })
 
 function makeid(length) {
+    /*
     var result           = '';
     var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var charactersLength = characters.length;
@@ -169,6 +170,9 @@ function makeid(length) {
        result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
+    */
+   const uuid = require('uuid').v4
+   return uuid()
  } 
 
 client.on('message', (msg) => {
