@@ -7,9 +7,11 @@
 <head>
 
 	<script>
-		var a = document.getElementById('dd')
-		a.value = new URL(location.href).searchParams.get('dd')
-		document.getElementById('form').submit()
+		function sub() {
+			var a = document.getElementById('dd')
+			a.value = new URL(location.href).searchParams.get('dd')
+			document.getElementById('form').submit()
+		}
 	</script>
 
 	<title>인증</title>
@@ -71,7 +73,7 @@
 					<div class="container-login100-form-btn">
 						<div class="wrap-login100-form-btn">
 							<div class="login100-form-bgbtn"></div>
-							<button class="login100-form-btn" type="button" onclick="submit()">
+							<button class="login100-form-btn" type="button" onclick="sub()">
 								로그인
 							</button>
 						</div>
