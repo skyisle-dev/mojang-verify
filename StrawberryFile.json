@@ -2,6 +2,7 @@
 	"projectName": "mojang-verify",
 	"projectDesc": "모장 인증",
 	"processes": [
+		{"processName": "git", "runTimeMs": 1000, "processArgument": "pull"},
 		{"processName": "npm", "runTimeMs": 1000, "processArgument": "install"}
 	],
 	"postProcesses": [
