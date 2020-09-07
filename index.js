@@ -92,7 +92,8 @@ app.get('/unverify', (req,res) => {
     member.roles.remove(guild.roles.cache.get('749569591973511188'))
     fs.readFile('./' + id + '.txt', (err, data) => {
         if(err) { console.log(err); return res.send('<script>alert("오류가 났습니다."); history.back()</script>') }
-        fs.unlinkSync(`./${data}.txt`, '')
+        fs.unlinkSync(`./${data}.txt`)
+        fs.unlinkSync(`./${id}.txt`)
         unverifyKeyMap.delete(req.body.dd)
         return res.send('<script>alert("성공적으로 인증이 취소되었습니다."); location.href = "/finish"</script>')
     })
