@@ -91,7 +91,7 @@ app.get('/unverify', (req,res) => {
     const member = guild.members.cache.get(id)
     member.roles.remove(guild.roles.cache.get('749569591973511188'))
     fs.readFile('./' + id + '.txt', (err, data) => {
-        if(err) { console.log(err); return res.send('<script>alert("오류가 났습니다."); history.back()</script>') }
+        if(err) { console.log(err) }
         fs.unlinkSync(`./${data}.txt`)
         fs.unlinkSync(`./${id}.txt`)
         unverifyKeyMap.delete(req.body.dd)
