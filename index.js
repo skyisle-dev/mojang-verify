@@ -187,7 +187,7 @@ client.on('message', (msg) => {
         return msg.channel.send('DM에서는 이용하실 수 없습니다.')
     }
 
-    if(msg.content.startsWith('/클리어') && !isNaN(parseInt(msg.content.split(' ')[1]))) {
+    if(msg.member.hasPermission('ADMINISTRATOR') && msg.content.startsWith('/클리어') && !isNaN(parseInt(msg.content.split(' ')[1]))) {
         msg.channel.bulkDelete(parseInt(msg.content.split(' ')[1]))
     }
 
