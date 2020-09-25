@@ -100,6 +100,10 @@ app.get('/unverify', (req,res) => {
     
 })
 
+app.get('/support', (req, res) => {
+    return res.redirect(200, 'https://skyisle.xyz/support')
+})
+
 app.post('/verify', (req,res) => {
 
     if(check(req.body.dd) === 'NotFoundUser') {
