@@ -16,7 +16,8 @@ app.use(Express.urlencoded())
 app.use(Express.static('./webroot'))
 
 app.get('/tos', (req,res) => {
-    return res.sendFile(__dirname + '/webroot/tos.html')
+    //return res.sendFile(__dirname + '/webroot/tos.html')
+    return res.redirect('https://rb.gy/vjta5g')
 })
 
 app.get('/', (req,res) => {
