@@ -101,7 +101,7 @@ app.get('/unverify', (req,res) => {
 })
 
 app.get('/support', (req, res) => {
-    return res.redirect(200, 'https://skhcs.com/skyisle')
+    return res.redirect('https://skhcs.com/skyisle')
 })
 
 app.post('/verify', (req,res) => {
