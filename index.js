@@ -20,6 +20,10 @@ app.get('/tos', (req,res) => {
     return res.redirect('https://rb.gy/vjta5g')
 })
 
+app.get('/donation_list', (req,res) => {
+    return res.redirect('https://rb.gy/jnumd7')
+})
+
 app.get('/', (req,res) => {
     if(req.query.dd === undefined || req.query.dd.replace(' ','') === '') {
         return res.sendStatus(404)
