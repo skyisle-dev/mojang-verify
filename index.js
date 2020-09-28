@@ -6,7 +6,8 @@ const request = require('request')
 
 const fs = require('fs')
 
-const discord = require('discord.js')
+const discord = require('discord.js');
+const { fileURLToPath } = require('url');
 const client = new discord.Client()
 
 const keyMap = new Map()
@@ -22,6 +23,19 @@ app.get('/tos', (req,res) => {
 
 app.get('/donation_list', (req,res) => {
     return res.redirect('https://rb.gy/jnumd7')
+})
+
+app.get('/:link', (req,res) => {
+    if(fs.existsSync('./' + req.params.link + '.link')) {
+        fs.readFile('./' + req.params.link + '.link', (err, data) => {
+            if(err) {
+                res.status(500).send('오류가 났습니다. ' + err.name)
+                return
+            }
+            res.redirect(data)
+            return
+        })
+    }
 })
 
 app.get('/support', (req,res) => {
@@ -202,6 +216,23 @@ client.on('message', (msg) => {
 
     if(msg.member.hasPermission('ADMINISTRATOR') && msg.content.startsWith('/클리어') && !isNaN(parseInt(msg.content.split(' ')[1]))) {
         msg.channel.bulkDelete(parseInt(msg.content.split(' ')[1]))
+    }
+
+    /*
+        /리다이렉트 <커스텀링크(skyisle.xyz/링크 의 링크)> <이동할 링크>
+    */
+
+    if(msg.content.startsWith('/리다이렉트') && msg.member.hasPermission('ADMINISTRATOR') && msg.content.split(' ').length > 3) {
+        fs.writeFile('./' + msg.content.split(' ')[1] + '.link', msg.content.split(' ')[2], (err) => {
+            if(err) {
+                msg.channel.send('오류가 발생하였습니다. ' + err.name)
+                console.error(err)
+                return
+            }
+
+            msg.channel.send('성공적으로 등록되었습니다.')
+            return
+        })
     }
 
     if(msg.content === '/인증' && msg.channel.id === '749832727485743216') {
