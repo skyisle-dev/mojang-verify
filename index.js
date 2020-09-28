@@ -197,7 +197,7 @@ function makeid(length) {
 client.on('message', (msg) => {
     if(msg.author.bot) return
     if(msg.channel.type === 'dm') {
-        return msg.channel.send('DM에서는 이용하실 수 없습니다.')
+        return msg.channel.send('<#749832727485743216>에서 /인증 명령어를 통해 URL을 받아주세요')
     }
 
     if(msg.member.hasPermission('ADMINISTRATOR') && msg.content.startsWith('/클리어') && !isNaN(parseInt(msg.content.split(' ')[1]))) {
