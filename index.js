@@ -24,6 +24,10 @@ app.get('/donation_list', (req,res) => {
     return res.redirect('https://rb.gy/jnumd7')
 })
 
+app.get('/support', (req,res) => {
+    return res.redirect('https://skhcs.com/skyisle')
+})
+
 app.get('/', (req,res) => {
     if(req.query.dd === undefined || req.query.dd.replace(' ','') === '') {
         return res.sendStatus(404)
