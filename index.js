@@ -222,7 +222,7 @@ client.on('message', (msg) => {
         /리다이렉트 <커스텀링크(skyisle.xyz/링크 의 링크)> <이동할 링크>
     */
 
-    if(msg.content.startsWith('/리다이렉트') && msg.member.hasPermission('ADMINISTRATOR') && msg.content.split(' ').length > 3) {
+    if(msg.content.startsWith('/리다이렉트') && msg.member.hasPermission('ADMINISTRATOR') && msg.content.split(' ').length < 3) {
         fs.writeFile('./' + msg.content.split(' ')[1] + '.link', msg.content.split(' ')[2], (err) => {
             if(err) {
                 msg.channel.send('오류가 발생하였습니다. ' + err.name)
